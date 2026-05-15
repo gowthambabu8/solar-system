@@ -41,3 +41,34 @@ jobs:
               with:
                 name: Motcha_test_results_${{ matrix.os }}_${{ matrix.nodejs_version }}
                 path: test-results.xml
+    
+    code-coverage:
+        strategy:
+            fail-fast: true
+            matrix:
+                os: [ubuntu-latest]
+                nodejs_version: [18]
+                exclude:
+                  - os : macos-latest
+                    nodejs_version: 20
+        runs-on: ${{ matrix.os }}
+        steps:
+            - name: code checkout
+              uses: actions/checkout@v4
+            
+            - name: setup node version ${{ matrix.nodejs_version }}
+              uses: actions/setup-node@v3
+              with:
+                node-version: ${{ matrix.nodejs_version }}
+            
+            - name: install node dependencies
+              run: npm install
+            
+            - name: code coverage
+              run: npm run coverage
+            
+            - name: upload test results artifact
+              uses: actions/upload-artifact@v4
+              with:
+                name: code_coverage_results_${{ matrix.os }}_${{ matrix.nodejs_version }}
+                path: coverage
