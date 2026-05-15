@@ -34,9 +34,11 @@ jobs:
               run: npm install
             
             - name: unit testing
+              id: npm-unit-testing-result
               run: npm test
             
             - name: upload test results artifact
+              if: steps.npm-unit-testing-result.outcome == 'failure' || steps.npm-unit-testing-result.outcome == 'success'
               uses: actions/upload-artifact@v4
               with:
                 name: Motcha_test_results_${{ matrix.os }}_${{ matrix.nodejs_version }}
