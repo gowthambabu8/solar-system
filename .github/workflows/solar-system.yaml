@@ -38,12 +38,13 @@ jobs:
               run: npm test
             
             - name: Dump steps context
+              if: always()
               env:
                 STEPS_CONTEXT: ${{ toJson(steps) }}
               run: echo "$STEPS_CONTEXT"
-              
+
             - name: upload test results artifact
-              if: steps.npm-unit-testing-result.outcome == 'failure' || steps.npm-unit-testing-result.outcome == 'success'
+              if: failure() && ( steps.npm-unit-testing-result.outcome == 'failure' || steps.npm-unit-testing-result.outcome == 'success' )
               uses: actions/upload-artifact@v4
               with:
                 name: Motcha_test_results_${{ matrix.os }}_${{ matrix.nodejs_version }}
