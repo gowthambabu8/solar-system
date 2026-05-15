@@ -91,12 +91,13 @@ jobs:
     
     docker:
         runs-on: ubuntu-latest
+        needs: [unit-testing, code-coverage]
         steps:
             - name: code checkout
               uses: actions/checkout@v4
             
             - name: dockerhub login
-              uses: actions/login-action@v2.2.0
+              uses: docker/login-action@v2.2.0
               with:
                 username: ${{ vars.DOCKER_USERNAME }}
                 password: ${{ secrets.DOCKER_PASSWORD }}
