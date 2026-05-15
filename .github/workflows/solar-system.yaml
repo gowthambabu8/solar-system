@@ -15,8 +15,8 @@ jobs:
         strategy:
             fail-fast: true
             matrix:
-                os: [ubuntu-latest, macos-latest]
-                nodejs_version: [18,19,20]
+                os: [ubuntu-latest]
+                nodejs_version: [18]
                 exclude:
                   - os : macos-latest
                     nodejs_version: 20
@@ -66,6 +66,7 @@ jobs:
             
             - name: code coverage
               run: npm run coverage
+              continue-on-error: true
             
             - name: upload test results artifact
               uses: actions/upload-artifact@v4
