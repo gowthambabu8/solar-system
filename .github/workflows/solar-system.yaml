@@ -190,4 +190,24 @@ jobs:
               run: |
                 kubectl version
                 echo "====="
-                kubectl get deploy
+            
+            - name: save ingress-ip as github variable
+              run: echo "INGRESS-IP=$(kubectl -n ingress-nginx get services ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')" >> $GITHUB_ENV
+            
+            - name: replace placeholder
+              uses: cschleiden/replace-tokens@v1
+              with:
+                tokenPrefix: '_{_'
+                tokenSuffix: '_}_'
+                files: '["kubernetes/development/*"]'
+              env:
+                NAMESPACE: default
+                REPLICAS: 1
+                K8S_IMAGE: ${{ vars.DOCKER_USERNAME }}/solar-system:${{ github.sha }}
+                INGRESS_IP: $INGRESS-IP
+            
+            - name: check files
+              run: |
+                cat kubernetes/development/*.yaml
+
+              
