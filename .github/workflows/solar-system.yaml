@@ -197,8 +197,8 @@ jobs:
             - name: replace placeholder
               uses: cschleiden/replace-tokens@v1
               with:
-                tokenPrefix: '$'
-                tokenSuffix: '}'
+                tokenPrefix: '#'
+                tokenSuffix: '#'
                 files: '["kubernetes/development/*"]'
               env:
                 NAMESPACE: default
