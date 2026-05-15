@@ -88,3 +88,16 @@ jobs:
               with:
                 name: code_coverage_results_${{ matrix.os }}_${{ matrix.nodejs_version }}
                 path: coverage
+    
+    docker:
+        runs-on: ubuntu-latest
+        steps:
+            - name: code checkout
+              uses: actions/checkout@v4
+            
+            - name: dockerhub login
+              uses: actions/login-action@v2.2.0
+              with:
+                username: ${{ vars.DOCKER_USERNAME }}
+                password: ${{ secrets.DOCKER_PASSWORD }}
+                
