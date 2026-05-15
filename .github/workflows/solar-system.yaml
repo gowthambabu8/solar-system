@@ -169,7 +169,8 @@ jobs:
         needs: [ docker ]
         permissions:
             id-token: write
-
+        outputs:
+          app_uri: ${{ steps.app-uri.outputs.APP_URI }}
         steps:
             - name: code checkout
               uses: actions/checkout@v4
@@ -223,6 +224,7 @@ jobs:
                 kubectl apply -f kubernetes/development
             
             - name: set app url 
+              id: app-uri
               run: echo "APP_URI=$(kubectl get ingress -n default -o jsonpath='{.items[0].spec.tls[0].hosts[0]}')" >> $GITHUB_ENV
     
     integration-testing:
@@ -231,7 +233,7 @@ jobs:
         steps:
             - name: test app url
               run: |
-                echo ${{ env.APP_URI }}
+                echo ${{ needs.dev-deploy.outputs.app_uri }}
                 echo "====="
-                curl https://${{ env.APP_URI }}/live -s -k | js -r .status | grep -i live
+                curl https://${{ needs.dev-deploy.outputs.app_uri }}/live -s -k | js -r .status | grep -i live
 
