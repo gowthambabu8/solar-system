@@ -169,6 +169,7 @@ jobs:
         needs: [ docker ]
         permissions:
             id-token: write
+            
         steps:
             - name: code checkout
               uses: actions/checkout@v4
