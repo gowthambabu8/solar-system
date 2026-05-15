@@ -197,12 +197,10 @@ jobs:
             - name: replace placeholder
               uses: cschleiden/replace-tokens@v1
               with:
-                tokenPrefix: '#'
-                tokenSuffix: '#'
                 files: '["kubernetes/development/*"]'
               env:
                 NAMESPACE: default
-                REPLICAS: 1
+                REPLICAS: "1"
                 K8S_IMAGE: ${{ vars.DOCKER_USERNAME }}/solar-system:${{ github.sha }}
                 INGRESS_IP: $INGRESS-IP
             
