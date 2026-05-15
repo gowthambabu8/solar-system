@@ -44,7 +44,7 @@ jobs:
               run: echo "$STEPS_CONTEXT"
 
             - name: upload test results artifact
-              if: failure() && ( steps.npm-unit-testing-result.outcome == 'failure' || steps.npm-unit-testing-result.outcome == 'success' )
+              if: failure()
               uses: actions/upload-artifact@v4
               with:
                 name: Motcha_test_results_${{ matrix.os }}_${{ matrix.nodejs_version }}
