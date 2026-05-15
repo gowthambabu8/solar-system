@@ -221,10 +221,17 @@ jobs:
             - name: deploy to Dev
               run: |
                 kubectl apply -f kubernetes/development
+            
+            - name: set app url 
+              run: echo "APP_URI=$(kubectl get ingress -n default -o jsonpath='{.items[0].spec.tls[0].hosts[0]}')" >> $GITHUB_ENV
+    
+    integration-testing:
+        needs: dev-deploy
+        runs-on: ubuntu-latest
+        steps:
+            - name: test app url
+              run: |
+                echo ${{ env.APP_URI }}
+                echo "====="
+                curl https://${{ env.APP_URI }}/live -s -k | js -r .status | grep -i live
 
-
-
-
-
-
-              
