@@ -207,5 +207,22 @@ jobs:
             - name: check files
               run: |
                 cat kubernetes/development/*.yaml
+            
+            - name: create secrets
+              run: |
+                kubectl -n default create secret generic mongo-db-creds \
+                --from-literal=MONGO_URI=${{env.MONGO_URI}} \
+                --from-literal=MONGO_USERNAME=${{ vars.MONGO_USERNAME }} \
+                --from-literal=MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }} \
+                -o yaml | kubectl apply -f -
+            
+            - name: deploy to Dev
+              run: |
+                kubectl apply -f kubernetes/development
+
+
+
+
+
 
               
