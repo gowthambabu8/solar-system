@@ -169,7 +169,7 @@ jobs:
         needs: [ docker ]
         permissions:
             id-token: write
-            
+
         steps:
             - name: code checkout
               uses: actions/checkout@v4
@@ -190,4 +190,4 @@ jobs:
               run: |
                 kubectl version
                 echo "====="
-                kubectl get nodes
+                kubectl get deploy
