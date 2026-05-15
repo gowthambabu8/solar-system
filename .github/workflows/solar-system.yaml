@@ -193,7 +193,7 @@ jobs:
                 echo "====="
             
             - name: save ingress-ip as github variable
-              run: echo "INGRESS_IP=$(kubectl -n ingress-nginx get services ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')" >> $GITHUB_OUTPUT
+              run: echo "INGRESS_IP=$(kubectl -n ingress-nginx get services ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')" >> $GITHUB_ENV
             
             - name: replace placeholder
               uses: cschleiden/replace-tokens@v1
@@ -225,7 +225,7 @@ jobs:
             
             - name: set app url 
               id: app-uri
-              run: echo "APP_URI=$(kubectl get ingress -n default -o jsonpath='{.items[0].spec.tls[0].hosts[0]}')" >> $GITHUB_ENV
+              run: echo "APP_URI=$(kubectl get ingress -n default -o jsonpath='{.items[0].spec.tls[0].hosts[0]}')" >> $GITHUB_OUTPUT
     
     integration-testing:
         needs: dev-deploy
