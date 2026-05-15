@@ -20,7 +20,7 @@ jobs:
                 exclude:
                   - os : macos-latest
                     nodejs_version: 20
-                    
+
         runs-on: ${{ matrix.os }}
         steps:
             - name: code checkout
@@ -102,4 +102,25 @@ jobs:
               with:
                 username: ${{ vars.DOCKER_USERNAME }}
                 password: ${{ secrets.DOCKER_PASSWORD }}
-                
+            - name: docker build test
+              uses: docker/build-push-action@v4
+              with:
+                context: .
+                push: false
+                tag: ${{ vars.DOCKER_USERNAME }}/solar-system:${{ github.sha }}
+            
+            - name: docker test
+              run: |
+                docker images
+                docker run --name solar-system-app -d \
+                -p 3000:3000 \
+                -e MONGO_URI=$MONGO_URI \
+                -e MONGO_USERNAME=$MONGO_USERNAME \
+                -e MONGO_PASSWORD=$MONGO_PASSWORD \
+                ${{ vars.DOCKER_USERNAME }}/solar-system:${{ github.sha }}
+
+                export IP=$(docker inspect -f '{{ range .NetworkSettings.Networks }}{{.IPAddress}}{{end}}' solar-system-app)
+                echo $IP
+
+                echo Testing docker image
+                wget -q -O 127.0.0.1:3000/live | grep live
