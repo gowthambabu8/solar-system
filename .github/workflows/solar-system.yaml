@@ -68,6 +68,17 @@ jobs:
                 path: test-results.xml
     
     code-coverage:
+        container: 
+            image: node:18
+        services:
+          mongo-db:
+            image: siddharth67/mongo-db:non-prod
+            options: 
+                -- name mongo
+        env:
+            MONGO_URI: "mongodb://mongo:27017/superData"
+            MONGO_USERNAME: non-prod-user
+            MONGO_PASSWORD: non-prod-password
         strategy:
             fail-fast: true
             matrix:
@@ -81,10 +92,10 @@ jobs:
             - name: code checkout
               uses: actions/checkout@v4
             
-            - name: setup node version ${{ matrix.nodejs_version }}
-              uses: actions/setup-node@v3
-              with:
-                node-version: ${{ matrix.nodejs_version }}
+            # - name: setup node version ${{ matrix.nodejs_version }}
+            #   uses: actions/setup-node@v3
+            #   with:
+            #     node-version: ${{ matrix.nodejs_version }}
             
             - name: install node dependencies
               run: npm install
