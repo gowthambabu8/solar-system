@@ -12,6 +12,14 @@ env:
 
 jobs:
     unit-testing:
+        strategy:
+            fail-fast: true
+            matrix:
+                os: [ubuntu-latest, macos-latest]
+                nodejs_version: [18,19,20]
+                exclude:
+                  - os : mac-latest
+                    nodejs_version: 20
         runs-on: ubuntu-latest
         steps:
             - name: code checkout
