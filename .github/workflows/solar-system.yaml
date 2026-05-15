@@ -37,6 +37,11 @@ jobs:
               id: npm-unit-testing-result
               run: npm test
             
+            - name: Dump steps context
+              env:
+                STEPS_CONTEXT: ${{ toJson(steps) }}
+              run: echo "$STEPS_CONTEXT"
+              
             - name: upload test results artifact
               if: steps.npm-unit-testing-result.outcome == 'failure' || steps.npm-unit-testing-result.outcome == 'success'
               uses: actions/upload-artifact@v4
