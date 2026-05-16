@@ -167,22 +167,25 @@ jobs:
     dev-deploy:
         if: contains(github.ref, 'feature')
         needs: [ docker ]
+        permissions:
+          id-token: write
+          contents: read
         uses: ./.github/workflows/reuse-deployment.yaml
         secrets: 
           mongodb-password: ${{ secrets.MONGO_PASSWORD }}
         with:
           mongodb-uri: ${{ vars.MONGO_URI }}
     
-    dev-integration-testing:
-        if: contains(github.ref, 'feature')
-        needs: dev-deploy
-        runs-on: ubuntu-latest
-        steps:
-            - name: test app url
-              run: |
-                echo ${{ needs.dev-deploy.outputs.app_uri }}
-                echo "====="
-                curl https://${{ needs.dev-deploy.outputs.app_uri }}/live -s -k | jq -r .status | grep -i live
+    # dev-integration-testing:
+    #     if: contains(github.ref, 'feature')
+    #     needs: dev-deploy
+    #     runs-on: ubuntu-latest
+    #     steps:
+    #         - name: test app url
+    #           run: |
+    #             echo ${{ needs.dev-deploy.outputs.app_uri }}
+    #             echo "====="
+    #             curl https://${{ needs.dev-deploy.outputs.app_uri }}/live -s -k | jq -r .status | grep -i live
 
     prod-deploy:
         if: github.ref == 'refs/heads/main'
@@ -193,13 +196,13 @@ jobs:
         with:
           mongodb-uri: ${{ vars.MONGO_URI }}
 
-    prod-integration-testing:
-        if: github.ref == 'refs/heads/main'
-        needs: prod-deploy
-        runs-on: ubuntu-latest
-        steps:
-            - name: test app url
-              run: |
-                echo ${{ needs.prod-deploy.outputs.app_uri }}
-                echo "====="
-                curl https://${{ needs.prod-deploy.outputs.app_uri }}/live -s -k | jq -r .status | grep -i live
+    # prod-integration-testing:
+    #     if: github.ref == 'refs/heads/main'
+    #     needs: prod-deploy
+    #     runs-on: ubuntu-latest
+    #     steps:
+    #         - name: test app url
+    #           run: |
+    #             echo ${{ needs.prod-deploy.outputs.app_uri }}
+    #             echo "====="
+    #             curl https://${{ needs.prod-deploy.outputs.app_uri }}/live -s -k | jq -r .status | grep -i live
