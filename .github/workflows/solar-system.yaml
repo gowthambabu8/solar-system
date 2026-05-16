@@ -171,6 +171,9 @@ jobs:
             id-token: write
         outputs:
           app_uri: ${{ steps.app-uri.outputs.APP_URI }}
+        environment:
+          name: "development"
+          url: ${{ steps.app-uri.outputs.APP_URI }}
         steps:
             - name: code checkout
               uses: actions/checkout@v4
