@@ -203,8 +203,8 @@ jobs:
                 NAMESPACE: default
                 REPLICAS: "1"
                 K8S_IMAGE: ${{ vars.DOCKER_USERNAME }}/solar-system:${{ github.sha }}
-                #INGRESS_IP: ${{ env.INGRESS_IP}}
-                INGRESS_IP: "34.228.110.34"
+                INGRESS_IP: ${{ env.INGRESS_IP}}
+                #INGRESS_IP: "34.228.110.34"
             
             - name: check files
               run: |
