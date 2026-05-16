@@ -41,7 +41,7 @@ jobs:
                 node-version: ${{ matrix.nodejs_version }}
             
             - name: cache npm dependencies
-              uses: ./.github/custome-actions/npm-setup/action.yaml
+              uses: ./.github/custome-actions/npm-setup
               with:
                 path-of-the-folder: node_modules
             
@@ -93,7 +93,7 @@ jobs:
             #     node-version: ${{ matrix.nodejs_version }}
             
             - name: cache npm dependencies
-              uses: ./.github/custome-actions/npm-setup/action.yaml
+              uses: ./.github/custome-actions/npm-setup
               with:
                 path-of-the-folder: node_modules
             
