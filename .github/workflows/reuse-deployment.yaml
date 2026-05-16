@@ -8,6 +8,14 @@ on:
             mongodb-uri:
                 required: true
                 type: string
+            environment:
+                required: true
+                type: string
+                default: "development"
+            k8s-manifest-dir:
+                required: true
+                type: string
+                default: "kubernetes/development"
       
 jobs:
     reuse-deploy:
@@ -17,7 +25,7 @@ jobs:
         outputs:
           app_uri: ${{ steps.app-uri.outputs.APP_URI }} 
         environment:
-          name: development
+          name: ${{ inputs.environment }}
           url: https://${{ steps.app-uri.outputs.APP_URI }}
         steps:
             - name: code checkout
@@ -48,7 +56,7 @@ jobs:
             - name: replace placeholder
               uses: cschleiden/replace-tokens@v1
               with:
-                files: '["kubernetes/development/*"]'
+                files: '["${{ inputs.k8s-manifest-dir }}/*"]'
               env:
                 NAMESPACE: ${{ vars.NAMESPACE }}
                 REPLICAS: ${{ vars.REPLICAS }}
@@ -58,7 +66,7 @@ jobs:
             
             - name: check files
               run: |
-                cat kubernetes/development/*.yaml
+                cat ${{ inputs.k8s-manifest-dir }}/*.yaml
             
             - name: create secrets
               run: |
@@ -72,7 +80,7 @@ jobs:
             
             - name: deploy to Dev
               run: |
-                kubectl apply -f kubernetes/development
+                kubectl apply -f ${{ inputs.k8s-manifest-dir }}
             
             - name: set app url 
               id: app-uri
