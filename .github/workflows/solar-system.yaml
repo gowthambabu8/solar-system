@@ -110,6 +110,34 @@ jobs:
                 name: code_coverage_results_${{ matrix.os }}_${{ matrix.nodejs_version }}
                 path: coverage
     
+    reports-upload:
+      runs-on: ubuntu-latest
+      continue-on-error: true
+      needs: [unit-testing, code-coverage]
+      steps:
+        - name: code checkout
+          uses: actions/checkout@v4
+        
+        - name: Download unit test results
+          uses: actions/download-artifact@v4
+          with:
+            name: Motcha_test_results_ubuntu-latest_18
+        
+        - name: Download code coverage results
+          uses: actions/download-artifact@v4
+          with:
+            name: code_coverage_results_ubuntu-latest_18
+        
+        - name: merge reports into single folder
+          run: |
+           mkdir reports-${{ github.sha }}
+           mv coverage reports-${{ github.sha }}/
+           mv test-results.xml reports-${{ github.sha }}/
+           ls -ltr reports-${{ github.sha }}/
+        
+        - name: Upload to S3
+          run: echo uploading....
+
     docker:
         runs-on: ubuntu-latest
         needs: [unit-testing, code-coverage]
