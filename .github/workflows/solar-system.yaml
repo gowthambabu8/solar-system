@@ -170,7 +170,7 @@ jobs:
         permissions:
             id-token: write
         outputs:
-          app_uri: ${{ steps.app-uri.outputs.APP_URI }}
+          app_uri: ${{ steps.app-uri.outputs.APP_URI }} 
         environment:
           name: development
           url: https://${{ steps.app-uri.outputs.APP_URI }}
