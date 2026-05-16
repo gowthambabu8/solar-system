@@ -135,8 +135,18 @@ jobs:
            mv test-results.xml reports-${{ github.sha }}/
            ls -ltr reports-${{ github.sha }}/
         
+        - name: Configure AWS credentials
+          uses: aws-actions/configure-aws-credentials@v4
+          with:
+            role-to-assume: arn:aws:iam::007670671403:role/github-actions-deploy
+            role-session-name: github-actions-${{ github.run_id }}
+            aws-region: us-east-1
+
         - name: Upload to S3
-          run: echo uploading....
+          run: |
+            aws s3 cp ./reports-${{ github.sha }} s3://solar-system-reports-bucket-007670671403-us-east-1-an/reports-${{ github.sha }}/ --recursive
+            # or sync:
+            # aws s3 sync ./reports s3://solar-system-reports-bucket/reports-${{ github.sha }}/ --delete
 
     docker:
         runs-on: ubuntu-latest
