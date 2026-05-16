@@ -217,7 +217,7 @@ jobs:
             
             - name: create secrets
               run: |
-                kubectl -n default create secret generic mongo-db-creds \
+                kubectl -n ${{ vars.NAMESPACE }} create secret generic mongo-db-creds \
                 --from-literal=MONGO_URI=${{env.MONGO_URI}} \
                 --from-literal=MONGO_USERNAME=${{ vars.MONGO_USERNAME }} \
                 --from-literal=MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }} \
@@ -231,7 +231,7 @@ jobs:
             
             - name: set app url 
               id: app-uri
-              run: echo "APP_URI=$(kubectl get ingress -n default -o jsonpath='{.items[0].spec.tls[0].hosts[0]}')" >> $GITHUB_OUTPUT
+              run: echo "APP_URI=$(kubectl get ingress -n  ${{ vars.NAMESPACE }} -o jsonpath='{.items[0].spec.tls[0].hosts[0]}')" >> $GITHUB_OUTPUT
     
     integration-testing:
         needs: dev-deploy
