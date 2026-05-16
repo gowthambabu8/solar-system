@@ -1,0 +1,19 @@
+name: NPM Setup
+description: NPM Setup
+inputs:
+  path-of-the-folder:
+    required: true
+    description: Path folder
+
+runs:
+  using: "composite"
+  steps:
+    - name: cache npm dependencies
+      uses: actions/cache@v3
+      with:
+        path: ${{ inputs.path-of-the-folder }}
+        key: node_modules-${{ hashFiles('package-lock.json') }}
+  
+    - name: install node dependencies
+      run: npm install
+      shell: bash

@@ -41,14 +41,9 @@ jobs:
                 node-version: ${{ matrix.nodejs_version }}
             
             - name: cache npm dependencies
-              uses: actions/cache@v3
+              uses: ./.github/custome-actions/npm-setup/action.yaml
               with:
-                path: node_modules 
-                key: ${{ runner.os }}-node_modules-${{ hashFiles('package-lock.json') }}
-
-                
-            - name: install node dependencies
-              run: npm install
+                path-of-the-folder: node_modules
             
             - name: unit testing
               id: npm-unit-testing-result
@@ -97,8 +92,10 @@ jobs:
             #   with:
             #     node-version: ${{ matrix.nodejs_version }}
             
-            - name: install node dependencies
-              run: npm install
+            - name: cache npm dependencies
+              uses: ./.github/custome-actions/npm-setup/action.yaml
+              with:
+                path-of-the-folder: node_modules
             
             - name: code coverage
               run: npm run coverage
