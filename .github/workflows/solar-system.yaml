@@ -115,6 +115,8 @@ jobs:
       runs-on: ubuntu-latest
       continue-on-error: true
       needs: [unit-testing, code-coverage]
+      permissions:
+        id-token: write
       steps:
         - name: code checkout
           uses: actions/checkout@v4
