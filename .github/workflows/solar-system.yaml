@@ -193,8 +193,9 @@ jobs:
                 echo "======"
             
             - name: save ingress-ip as github variable
-              run: echo "INGRESS_IP=$(kubectl -n ingress-nginx get services ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')" >> $GITHUB_ENV
-            
+              run: | 
+                ELB_HOSTNAME=$(kubectl -n ingress-nginx get services ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+                echo "INGRESS_IP=$(nslookup $ELB_HOSTNAME | awk '/^Address: / { print $2 }' | head -n 1)"  >> $GITHUB_ENV
             - name: replace placeholder
               uses: cschleiden/replace-tokens@v1
               with:
