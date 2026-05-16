@@ -132,7 +132,6 @@ jobs:
         - name: merge reports into single folder
           run: |
            mkdir reports-${{ github.sha }}
-           mv coverage reports-${{ github.sha }}/
            mv test-results.xml reports-${{ github.sha }}/
            ls -ltr reports-${{ github.sha }}/
         
