@@ -16,7 +16,9 @@ on:
                 required: true
                 type: string
                 default: "kubernetes/development"
-      
+        outputs:
+          application-url:
+            value: ${{ jobs.reuse-deploy.outputs.app_uri }}
 jobs:
     reuse-deploy:
         permissions:
